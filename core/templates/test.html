@@ -1,10 +1,16 @@
-<!DOCTYPE html>
+<!doctype html>
+
+{% load static %}
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Test</title>
-</head>
-<body>
-<p>Hello, world!</p>
-</body>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Bootstrap demo</title>
+    <link href="{% static 'libs/bootstrap/bootstrap.min.css' %}" rel="stylesheet">
+  </head>
+  <body>
+    <h1>Hello, world!</h1>
+
+    <script src="{% static 'libs/bootstrap/bootstrap.bundle.min.js' %}"></script>
+  </body>
 </html>
