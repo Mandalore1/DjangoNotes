@@ -2,4 +2,6 @@
 /.idea
 /db.sqlite3
 /static
-/Notes/static
+/Notes/static/libs
+migrations
+/media
