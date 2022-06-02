@@ -5,12 +5,12 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Вход</title>
+    <title>Регистрация</title>
     <link href="{% static 'libs/bootstrap/bootstrap.min.css' %}" rel="stylesheet">
 </head>
 
 <body>
-<h1>Вход</h1>
+<h1>Регистрация</h1>
 <form class="mt-2 mb-2" action="" method="post">
     {% csrf_token %}
     {{ form.as_p }}
