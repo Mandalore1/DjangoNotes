@@ -1,33 +1,14 @@
-<!doctype html>
+{% extends "base.html" %}
 
-{% load static %}
-<html lang="en">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Регистрация</title>
-    <link href="{% static 'libs/bootstrap/bootstrap.min.css' %}" rel="stylesheet">
-</head>
+{% block title %}Регистрация{% endblock title %}
 
-<body>
-<h1>Регистрация</h1>
+{% block h1 %}Регистрация{% endblock h1 %}
+
+{% block content %}
 <form class="mt-2 mb-2" action="" method="post">
     {% csrf_token %}
     {{ form.as_p }}
 
-    <button type="submit" class="btn btn-primary btn-block">Войти</button>
+    <button type="submit" class="btn btn-primary btn-block">Зарегистрироваться</button>
 </form>
-
-{% if messages %}
-  {% for message in messages %}
-    {% if message.tags == "error" %}
-    <div class="alert alert-danger" role="alert">{{ message }}</div>
-    {% else %}
-    <div class="alert alert-{{ message.tags }}" role="alert">{{ message }}</div>
-    {% endif %}
-  {% endfor %}
-{% endif %}
-
-<script src="{% static 'libs/bootstrap/bootstrap.bundle.min.js' %}"></script>
-</body>
-</html>
+{% endblock content %}

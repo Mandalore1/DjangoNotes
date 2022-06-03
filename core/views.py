@@ -38,6 +38,8 @@ def login_view(request):
                                 password=login_form.cleaned_data["password"])
             if user is not None:
                 login(request, user)
+                if "next" in request.GET:
+                    return redirect(request.GET["next"])
                 return redirect("home")
             else:
                 messages.error(request, "Неправильное имя пользователя или пароль")
