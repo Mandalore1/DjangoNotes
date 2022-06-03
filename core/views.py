@@ -1,18 +1,28 @@
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.db import DatabaseError
 from django.shortcuts import render, redirect
 
 from .forms import LoginForm, RegisterForm
+from .models import Note
 
 
 # Create your views here.
 
 
-def test_view(request):
+def home_view(request):
     if request.method == "GET":
-        return render(request, "test.html")
+        return render(request, "home.html")
+
+
+@login_required
+def notes_list_view(request):
+    if request.method == "GET":
+        user = request.user
+        notes = Note.objects.filter(user=user)
+        return render(request, "notes_list.html", {"notes": notes})
 
 
 def login_view(request):
@@ -28,7 +38,7 @@ def login_view(request):
                                 password=login_form.cleaned_data["password"])
             if user is not None:
                 login(request, user)
-                return redirect("test")
+                return redirect("home")
             else:
                 messages.error(request, "Неправильное имя пользователя или пароль")
         else:
@@ -70,7 +80,7 @@ def register_view(request):
             else:
                 login(request, user)
                 messages.success(request, "Вы успешно зарегистрировались!")
-                return redirect("test")
+                return redirect("home")
 
         else:
             messages.error(request, "Данные имели неверный формат")
