@@ -13,12 +13,14 @@ from .models import Note
 
 
 def home_view(request):
+    """Контроллер главной страницы"""
     if request.method == "GET":
         return render(request, "home.html")
 
 
 @login_required
 def notes_list_view(request):
+    """Контроллер списка записок пользователя"""
     if request.method == "GET":
         user = request.user
         notes = Note.objects.filter(user=user)
@@ -26,6 +28,7 @@ def notes_list_view(request):
 
 
 def login_view(request):
+    """Контроллер входа пользователя в аккаунт"""
     login_form = None
 
     if request.method == "GET":
@@ -38,8 +41,13 @@ def login_view(request):
                                 password=login_form.cleaned_data["password"])
             if user is not None:
                 login(request, user)
+
+                # Если пользователь попал на страницу логина с другой страницы,
+                # перенаправляем его на изначальную страницу
                 if "next" in request.GET:
                     return redirect(request.GET["next"])
+
+                # Иначе перенаправляем его на главную страницу
                 return redirect("home")
             else:
                 messages.error(request, "Неправильное имя пользователя или пароль")
@@ -50,11 +58,13 @@ def login_view(request):
 
 
 def logout_view(request):
+    """Контроллер выхода пользователя из аккаунта"""
     logout(request)
     return redirect("login")
 
 
 def register_view(request):
+    """Контроллер регистрации пользователя"""
     register_form = None
 
     if request.method == "GET":
@@ -83,7 +93,6 @@ def register_view(request):
                 login(request, user)
                 messages.success(request, "Вы успешно зарегистрировались!")
                 return redirect("home")
-
         else:
             messages.error(request, "Данные имели неверный формат")
 

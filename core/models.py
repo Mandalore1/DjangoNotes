@@ -5,6 +5,7 @@ from django.db import models
 
 
 class Note(models.Model):
+    """Класс записки"""
     title = models.CharField(max_length=150, verbose_name="Заголовок")
     text = models.TextField(blank=True, verbose_name="Текст")
     image = models.ImageField(upload_to="note_images", verbose_name="Изображение", blank=True)
