@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 from django.db import DatabaseError
 from django.shortcuts import render, redirect, get_object_or_404
 
-from .forms import LoginForm, RegisterForm
+from .forms import LoginForm, RegisterForm, NoteForm
 from .models import Note
 
 
@@ -37,6 +37,30 @@ def notes_detail_view(request, pk):
             return redirect("home")
 
         return render(request, "notes_detail.html", {"note": note})
+
+
+@login_required
+def notes_add_view(request):
+    """Контроллер создания записки"""
+    form = None
+
+    if request.method == "GET":
+        form = NoteForm()
+        form.fields["user"].initial = request.user
+        return render(request, "notes_add.html", {"form": form})
+
+    if request.method == "POST":
+        form = NoteForm(request.POST, request.FILES)
+        if form.is_valid():
+            # Если вписали не своего пользователя
+            if request.user != form.cleaned_data["user"]:
+                return redirect("home")
+
+            note = form.save()
+            return redirect("note", pk=note.pk)
+        else:
+            messages.error(request, "Введенные данные имели неверный формат!")
+            return render(request, "notes_add.html", {"form": form})
 
 
 @login_required

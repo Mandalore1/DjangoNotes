@@ -5,6 +5,7 @@
 {% block h1 %}Мои записки{% endblock h1 %}
 
 {% block content %}
+<a href="{% url 'note_add'%}" class="btn btn-primary mb-3">Добавить записку</a>
 {% for note in notes %}
 <div class="card mb-3">
     <div class="card-header">

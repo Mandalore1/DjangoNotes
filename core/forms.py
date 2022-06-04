@@ -1,5 +1,6 @@
 import django.forms as forms
-from django.contrib.auth.models import User
+
+from core.models import Note
 
 
 class RegisterForm(forms.Form):
@@ -15,3 +16,16 @@ class LoginForm(forms.Form):
     """Форма входа"""
     username = forms.CharField(label="Имя пользователя", widget=forms.TextInput(attrs={"class": "form-control"}))
     password = forms.CharField(label="Пароль", widget=forms.PasswordInput(attrs={"class": "form-control"}))
+
+
+class NoteForm(forms.ModelForm):
+    """Форма записки"""
+    class Meta:
+        model = Note
+        fields = ["title", "text", "image", "user"]
+        widgets = {
+            "title": forms.TextInput(attrs={"class": "form-control"}),
+            "text": forms.Textarea(attrs={"class": "form-control"}),
+            "image": forms.FileInput(attrs={"class": "form-control"}),
+            "user": forms.HiddenInput()
+        }
