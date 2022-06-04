@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block title %}{{ note.title }}{% endblock title %}
+
+{% block h1 %}{{ note.title }}{% endblock h1 %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-4">
+        <img src="{{ note.image.url }}" class="img-fluid rounded-start mx-auto d-block" alt="Картинка записки">
+    </div>
+    <div class="col-md-8">
+        <p><strong>Автор:</strong> {{ note.user.username }}</p>
+        <p><strong>Создан:</strong> {{ note.created_at }}</p>
+        <p><strong>Изменен:</strong> {{ note.updated_at }}</p>
+        <hr>
+        <p>{{ note.text }}</p>
+    </div>
+</div>
+{% endblock content %}

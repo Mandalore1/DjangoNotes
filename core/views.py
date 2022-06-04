@@ -23,8 +23,19 @@ def notes_list_view(request):
     """Контроллер списка записок пользователя"""
     if request.method == "GET":
         user = request.user
-        notes = Note.objects.filter(user=user)
+        notes = user.notes.all()
         return render(request, "notes_list.html", {"notes": notes})
+
+
+@login_required
+def notes_detail_view(request, pk):
+    """Контроллер детализированного представления записки"""
+    note = Note.objects.get(pk=pk)
+
+    if note.user != request.user:
+        return redirect("home")
+
+    return render(request, "notes_detail.html", {"note": note})
 
 
 def login_view(request):

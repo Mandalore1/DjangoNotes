@@ -11,7 +11,7 @@ class Note(models.Model):
     image = models.ImageField(upload_to="note_images", verbose_name="Изображение", blank=True)
     created_at = models.DateTimeField(auto_now_add=True, verbose_name="Создан")
     updated_at = models.DateTimeField(auto_now=True, verbose_name="Обновлен")
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="user", verbose_name="Пользователь")
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="notes", verbose_name="Пользователь")
 
     def __str__(self):
         return self.title
