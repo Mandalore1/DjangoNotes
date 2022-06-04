@@ -5,9 +5,11 @@
 {% block h1 %}{{ note.title }}{% endblock h1 %}
 
 {% block content %}
-<div class="row">
+<div class="row mb-3">
     <div class="col-md-4">
+        {% if note.image %}
         <img src="{{ note.image.url }}" class="img-fluid rounded-start mx-auto d-block" alt="Картинка записки">
+        {% endif %}
     </div>
     <div class="col-md-8">
         <p><strong>Автор:</strong> {{ note.user.username }}</p>
@@ -15,6 +17,13 @@
         <p><strong>Изменен:</strong> {{ note.updated_at }}</p>
         <hr>
         <p>{{ note.text }}</p>
+    </div>
+</div>
+
+<div class="row mb-3">
+    <div class="col">
+        <a class="btn btn-primary" href="#">Изменить</a>
+        <a class="btn btn-danger" href="{% url 'note_delete' note.pk %}">Удалить</a>
     </div>
 </div>
 {% endblock content %}

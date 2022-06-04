@@ -3,7 +3,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.db import DatabaseError
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 
 from .forms import LoginForm, RegisterForm
 from .models import Note
@@ -30,12 +30,29 @@ def notes_list_view(request):
 @login_required
 def notes_detail_view(request, pk):
     """Контроллер детализированного представления записки"""
-    note = Note.objects.get(pk=pk)
+    if request.method == "GET":
+        note = get_object_or_404(Note, pk=pk)
 
+        if note.user != request.user:
+            return redirect("home")
+
+        return render(request, "notes_detail.html", {"note": note})
+
+
+@login_required
+def notes_delete_view(request, pk):
+    """Контроллер удаления записки"""
+    note = get_object_or_404(Note, pk=pk)
     if note.user != request.user:
         return redirect("home")
 
-    return render(request, "notes_detail.html", {"note": note})
+    if request.method == "GET":
+        return render(request, "notes_confirm_delete.html", {"note": note})
+
+    if request.method == "POST":
+        note.delete()
+        messages.success(request, "Записка успешно удалена!")
+        return redirect("notes")
 
 
 def login_view(request):

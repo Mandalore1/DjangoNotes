@@ -14,7 +14,9 @@
     <div class="card-body">
         <div class="row">
             <div class="col-md-4">
+                {% if note.image %}
                 <img src="{{ note.image.url }}" class="img-fluid rounded-start mx-auto d-block" alt="Картинка записки">
+                {% endif %}
             </div>
             <div class="col-md-8">
                 <h5 class="card-title">{{ note.title }}</h5>
@@ -32,7 +34,7 @@
             </button>
             <ul class="dropdown-menu">
                 <li><a class="dropdown-item" href="#">Изменить</a></li>
-                <li><a class="dropdown-item text-danger" href="#">Удалить</a></li>
+                <li><a class="dropdown-item text-danger" href="{% url 'note_delete' note.pk %}">Удалить</a></li>
             </ul>
         </div>
     </div>

@@ -17,5 +17,5 @@ class Note(models.Model):
         return self.title
 
     class Meta:
-        verbose_name = "Заметка"
-        verbose_name_plural = "Заметки"
+        verbose_name = "Записка"
+        verbose_name_plural = "Записки"
