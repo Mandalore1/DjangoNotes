@@ -34,7 +34,7 @@
                 <span class="visually-hidden">Toggle Dropdown</span>
             </button>
             <ul class="dropdown-menu">
-                <li><a class="dropdown-item" href="#">Изменить</a></li>
+                <li><a class="dropdown-item" href="{% url 'note_update' note.pk %}">Изменить</a></li>
                 <li><a class="dropdown-item text-danger" href="{% url 'note_delete' note.pk %}">Удалить</a></li>
             </ul>
         </div>

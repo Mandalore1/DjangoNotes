@@ -22,7 +22,7 @@
 
 <div class="row mb-3">
     <div class="col">
-        <a class="btn btn-primary" href="#">Изменить</a>
+        <a class="btn btn-primary" href="{% url 'note_update' note.pk %}">Изменить</a>
         <a class="btn btn-danger" href="{% url 'note_delete' note.pk %}">Удалить</a>
     </div>
 </div>

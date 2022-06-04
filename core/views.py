@@ -64,6 +64,30 @@ def notes_add_view(request):
 
 
 @login_required
+def notes_update_view(request, pk):
+    """Контроллер изменения записки"""
+    note = get_object_or_404(Note, pk=pk)
+    form = None
+
+    if request.method == "GET":
+        form = NoteForm(instance=note)
+        return render(request, "notes_update.html", {"form": form, "note": note})
+
+    if request.method == "POST":
+        form = NoteForm(request.POST, request.FILES, instance=note)
+        if form.is_valid():
+            # Если вписали не своего пользователя
+            if request.user != form.cleaned_data["user"]:
+                return redirect("home")
+
+            note = form.save()
+            return redirect("note", pk=note.pk)
+        else:
+            messages.error(request, "Введенные данные имели неверный формат!")
+            return render(request, "notes_add.html", {"form": form, "note": note})
+
+
+@login_required
 def notes_delete_view(request, pk):
     """Контроллер удаления записки"""
     note = get_object_or_404(Note, pk=pk)

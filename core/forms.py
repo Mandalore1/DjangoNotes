@@ -26,6 +26,6 @@ class NoteForm(forms.ModelForm):
         widgets = {
             "title": forms.TextInput(attrs={"class": "form-control"}),
             "text": forms.Textarea(attrs={"class": "form-control"}),
-            "image": forms.FileInput(attrs={"class": "form-control"}),
+            "image": forms.ClearableFileInput(attrs={"class": "form-control"}),
             "user": forms.HiddenInput()
         }
