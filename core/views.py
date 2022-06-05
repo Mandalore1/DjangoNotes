@@ -1,15 +1,9 @@
 from django.contrib import messages
-from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import User
-from django.db import DatabaseError
 from django.shortcuts import render, redirect, get_object_or_404
 
 from .forms import NoteForm
 from .models import Note
-
-
-# Create your views here.
 
 
 def home_view(request):
@@ -42,21 +36,16 @@ def notes_detail_view(request, pk):
 @login_required
 def notes_add_view(request):
     """Контроллер создания записки"""
-    form = None
-
     if request.method == "GET":
         form = NoteForm()
-        form.fields["user"].initial = request.user
         return render(request, "notes_add.html", {"form": form})
 
     if request.method == "POST":
         form = NoteForm(request.POST, request.FILES)
         if form.is_valid():
-            # Если вписали не своего пользователя
-            if request.user != form.cleaned_data["user"]:
-                return redirect("home")
-
-            note = form.save()
+            note = form.save(commit=False)
+            note.user = request.user
+            note.save()
             return redirect("note", pk=note.pk)
         else:
             messages.error(request, "Введенные данные имели неверный формат!")
@@ -67,7 +56,8 @@ def notes_add_view(request):
 def notes_update_view(request, pk):
     """Контроллер изменения записки"""
     note = get_object_or_404(Note, pk=pk)
-    form = None
+    if note.user != request.user:
+        return redirect("home")
 
     if request.method == "GET":
         form = NoteForm(instance=note)
@@ -76,10 +66,6 @@ def notes_update_view(request, pk):
     if request.method == "POST":
         form = NoteForm(request.POST, request.FILES, instance=note)
         if form.is_valid():
-            # Если вписали не своего пользователя
-            if request.user != form.cleaned_data["user"]:
-                return redirect("home")
-
             note = form.save()
             return redirect("note", pk=note.pk)
         else:

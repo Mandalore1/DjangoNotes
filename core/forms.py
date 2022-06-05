@@ -7,10 +7,9 @@ class NoteForm(forms.ModelForm):
     """Форма записки"""
     class Meta:
         model = Note
-        fields = ["title", "text", "image", "user"]
+        fields = ["title", "text", "image"]
         widgets = {
             "title": forms.TextInput(attrs={"class": "form-control"}),
             "text": forms.Textarea(attrs={"class": "form-control"}),
             "image": forms.ClearableFileInput(attrs={"class": "form-control"}),
-            "user": forms.HiddenInput()
         }
