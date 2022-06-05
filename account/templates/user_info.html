@@ -23,8 +23,9 @@
         <hr>
         <h2>О себе</h2>
         <p>{{ user.additional_info.about }}</p>
+
         {% if user == request.user %}
-        <a class="btn btn-primary" href="#">Редактировать информацию</a>
+        <a class="btn btn-primary" href="{% url 'user_info_update' user.username %}">Редактировать информацию</a>
         {% endif %}
     </div>
 </div>

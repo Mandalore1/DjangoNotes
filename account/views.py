@@ -1,16 +1,69 @@
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.db import DatabaseError
 from django.shortcuts import render, redirect, get_object_or_404
 
-# Create your views here.
-from account.forms import LoginForm, RegisterForm
+from account.forms import LoginForm, RegisterForm, UserMainInfoForm, UserAdditionalInfoForm
 
 
 def user_info_view(request, username):
+    """Контроллер просмотра информации о пользователе"""
+    if request.method == "GET":
+        user = get_object_or_404(User, username=username)
+        return render(request, "user_info.html", {"user": user})
+
+
+@login_required
+def user_info_update_view(request, username):
+    """Контроллер изменения информации о пользователе"""
     user = get_object_or_404(User, username=username)
-    return render(request, "user_info.html", {"user": user})
+    if request.user != user:
+        return redirect("home")
+    main_info_form = UserMainInfoForm(instance=user)
+    additional_info_form = UserAdditionalInfoForm(instance=user.additional_info)
+
+    if request.method == "GET":
+        return render(request, "user_info_update.html",
+                      {"main_info_form": main_info_form, "additional_info_form": additional_info_form})
+
+    if request.method == "POST":
+        try:
+            info_type = request.GET["info_type"]
+        except KeyError:
+            messages.error(request, "Не указан тип формы")
+            return render(request, "user_info_update.html",
+                          {"main_info_form": main_info_form, "additional_info_form": additional_info_form})
+
+        if info_type == "main":
+            main_info_form = UserMainInfoForm(request.POST, instance=user)
+            if main_info_form.is_valid():
+                main_info_form.save()
+                messages.success(request, "Данные обновлены успешно")
+                return render(request, "user_info_update.html",
+                              {"main_info_form": main_info_form, "additional_info_form": additional_info_form})
+            else:
+                messages.error(request, "Введенные данные имели неверный формат!")
+                return render(request, "user_info_update.html",
+                              {"main_info_form": main_info_form, "additional_info_form": additional_info_form})
+
+        elif info_type == "additional":
+            additional_info_form = UserAdditionalInfoForm(request.POST, request.FILES, instance=user.additional_info)
+            if additional_info_form.is_valid():
+                additional_info_form.save()
+                messages.success(request, "Данные обновлены успешно")
+                return render(request, "user_info_update.html",
+                              {"main_info_form": main_info_form, "additional_info_form": additional_info_form})
+            else:
+                messages.error(request, "Введенные данные имели неверный формат!")
+                return render(request, "user_info_update.html",
+                              {"main_info_form": main_info_form, "additional_info_form": additional_info_form})
+
+        else:
+            messages.error(request, "Не указан тип формы")
+            return render(request, "user_info_update.html",
+                          {"main_info_form": main_info_form, "additional_info_form": additional_info_form})
 
 
 def login_view(request):

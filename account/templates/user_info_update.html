@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block title %}Редактирование информации о себе{% endblock title %}
+
+{% block h1 %}Редактирование информации о себе{% endblock h1 %}
+
+{% block content %}
+<h2>Редактирование основной информации</h2>
+<form class="mt-2 mb-2" action="?info_type=main" method="post">
+    {% csrf_token %}
+    {{ main_info_form.as_p }}
+
+    <button type="submit" class="btn btn-primary btn-block">Сохранить</button>
+</form>
+<hr>
+<h2>Редактирование дополнительной информации</h2>
+<form class="mt-2 mb-2" action="?info_type=additional" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ additional_info_form.as_p }}
+
+    <button type="submit" class="btn btn-primary btn-block">Сохранить</button>
+</form>
+{% endblock content %}
