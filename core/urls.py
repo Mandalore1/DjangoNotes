@@ -1,4 +1,5 @@
 from django.urls import path
+
 import core.views as views
 
 urlpatterns = [
@@ -8,7 +9,4 @@ urlpatterns = [
     path('notes/add', views.notes_add_view, name="note_add"),
     path('notes/update/<int:pk>', views.notes_update_view, name="note_update"),
     path('notes/delete/<int:pk>', views.notes_delete_view, name="note_delete"),
-    path('login/', views.login_view, name="login"),
-    path('logout/', views.logout_view, name="logout"),
-    path('register/', views.register_view, name="register"),
 ]

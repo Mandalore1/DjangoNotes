@@ -21,7 +21,8 @@ from Notes import settings
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include("core.urls"))
+    path('', include("core.urls")),
+    path('', include("account.urls"))
 ]
 
 if settings.DEBUG:
