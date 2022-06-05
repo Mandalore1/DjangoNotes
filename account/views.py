@@ -2,10 +2,15 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.db import DatabaseError
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 
 # Create your views here.
 from account.forms import LoginForm, RegisterForm
+
+
+def user_info_view(request, username):
+    user = get_object_or_404(User, username=username)
+    return render(request, "user_info.html", {"user": user})
 
 
 def login_view(request):

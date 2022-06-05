@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block title %}Пользователь {{ user.username }}{% endblock title %}
+
+{% block h1 %}Информация о пользователе {{ user.username }}{% endblock h1 %}
+
+{% block content %}
+<div class="row mb-3">
+    <div class="col-md-4">
+        {% if user.additional_info.avatar %}
+        <img src="{{ user.additional_info.avatar.url }}" class="img-fluid rounded-start mx-auto d-block" alt="Аватар">
+        {% endif %}
+    </div>
+
+    <div class="col-md-8">
+        <p><strong>Имя:</strong> {{ user.first_name }}</p>
+        <p><strong>Фамилия:</strong> {{ user.last_name }}</p>
+        <p><strong>Дата рождения:</strong> {{ user.additional_info.date_of_birth }}</p>
+        <p><strong>Место проживания:</strong> {{ user.additional_info.place }}</p>
+        <p><strong>Email:</strong> {{ user.email }}</p>
+        <p><strong>Дата регистрации:</strong> {{ user.date_joined }}</p>
+        <p><strong>Был в сети:</strong> {{ user.last_login }}</p>
+        <hr>
+        <h2>О себе</h2>
+        <p>{{ user.additional_info.about }}</p>
+        {% if user == request.user %}
+        <a class="btn btn-primary" href="#">Редактировать информацию</a>
+        {% endif %}
+    </div>
+</div>
+{% endblock content %}
