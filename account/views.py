@@ -16,64 +16,92 @@ def user_info_view(request, username):
         return render(request, "user_info.html", {"user": user})
 
 
-@login_required
-def user_info_update_view(request, username):
-    """Контроллер изменения информации о пользователе"""
+def _get_user_and_additional_info(username):
+    """Возвращает пользователя и основную информацию"""
     user = get_object_or_404(User, username=username)
+
     try:
         additional_info = user.additional_info
     except ObjectDoesNotExist:
         additional_info = None
 
-    if request.user != user:
-        return redirect("home")
+    return user, additional_info
 
+
+def _get_main_and_additional_info_forms(user, additional_info):
+    """Возвращает формы основной и дополнительной информации"""
     main_info_form = UserMainInfoForm(instance=user)
     additional_info_form = UserAdditionalInfoForm(instance=additional_info)
+
+    return main_info_form, additional_info_form
+
+
+@login_required
+def user_info_update_view(request, username):
+    """Контроллер изменения информации о пользователе"""
+    user, additional_info = _get_user_and_additional_info(username)
+    main_info_form, additional_info_form = _get_main_and_additional_info_forms(user, additional_info)
+    context = {"main_info_form": main_info_form, "additional_info_form": additional_info_form}
+
+    if request.user != user:
+        return redirect("home")
 
     if request.method == "GET":
         return render(request, "user_info_update.html",
                       {"main_info_form": main_info_form, "additional_info_form": additional_info_form})
 
-    if request.method == "POST":
-        try:
-            info_type = request.GET["info_type"]
-        except KeyError:
-            messages.error(request, "Не указан тип формы")
-            return render(request, "user_info_update.html",
-                          {"main_info_form": main_info_form, "additional_info_form": additional_info_form})
 
-        if info_type == "main":
-            main_info_form = UserMainInfoForm(request.POST, instance=user)
-            if main_info_form.is_valid():
-                main_info_form.save()
-                messages.success(request, "Данные обновлены успешно")
-                return render(request, "user_info_update.html",
-                              {"main_info_form": main_info_form, "additional_info_form": additional_info_form})
-            else:
-                messages.error(request, "Введенные данные имели неверный формат!")
-                return render(request, "user_info_update.html",
-                              {"main_info_form": main_info_form, "additional_info_form": additional_info_form})
+@login_required
+def user_main_info_update_view(request, username):
+    """Контроллер обработки формы основной информации о пользователе"""
+    user, additional_info = _get_user_and_additional_info(username)
+    main_info_form, additional_info_form = _get_main_and_additional_info_forms(user, additional_info)
+    context = {"main_info_form": main_info_form, "additional_info_form": additional_info_form}
 
-        elif info_type == "additional":
-            additional_info_form = UserAdditionalInfoForm(request.POST, request.FILES, instance=additional_info)
-            if additional_info_form.is_valid():
-                additional_info = additional_info_form.save(commit=False)
-                additional_info.user = user
-                additional_info.save()
+    if request.user != user:
+        return redirect("home")
 
-                messages.success(request, "Данные обновлены успешно")
-                return render(request, "user_info_update.html",
-                              {"main_info_form": main_info_form, "additional_info_form": additional_info_form})
-            else:
-                messages.error(request, "Введенные данные имели неверный формат!")
-                return render(request, "user_info_update.html",
-                              {"main_info_form": main_info_form, "additional_info_form": additional_info_form})
+    # Если прислали не POST, обработаем с помощью контроллера для GET
+    if request.method != "POST":
+        return user_info_update_view(request, username)
 
-        else:
-            messages.error(request, "Не указан тип формы")
-            return render(request, "user_info_update.html",
-                          {"main_info_form": main_info_form, "additional_info_form": additional_info_form})
+    main_info_form = UserMainInfoForm(request.POST, instance=user)
+    context["main_info_form"] = main_info_form
+    if main_info_form.is_valid():
+        main_info_form.save()
+        messages.success(request, "Данные обновлены успешно")
+        return render(request, "user_info_update.html", context)
+    else:
+        messages.error(request, "Введенные данные имели неверный формат!")
+        return render(request, "user_info_update.html", context)
+
+
+@login_required
+def user_additional_info_update_view(request, username):
+    """Контроллер обработки формы дополнительной информации о пользователе"""
+    user, additional_info = _get_user_and_additional_info(username)
+    main_info_form, additional_info_form = _get_main_and_additional_info_forms(user, additional_info)
+    context = {"main_info_form": main_info_form, "additional_info_form": additional_info_form}
+
+    if request.user != user:
+        return redirect("home")
+
+    # Если прислали не POST, обработаем с помощью контроллера для GET
+    if request.method != "POST":
+        return user_info_update_view(request, username)
+
+    additional_info_form = UserAdditionalInfoForm(request.POST, request.FILES, instance=additional_info)
+    context["additional_info_form"] = additional_info_form
+    if additional_info_form.is_valid():
+        additional_info = additional_info_form.save(commit=False)
+        additional_info.user = user
+        additional_info.save()
+
+        messages.success(request, "Данные обновлены успешно")
+        return render(request, "user_info_update.html", context)
+    else:
+        messages.error(request, "Введенные данные имели неверный формат!")
+        return render(request, "user_info_update.html", context)
 
 
 def login_view(request):
