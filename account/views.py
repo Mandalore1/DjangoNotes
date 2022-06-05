@@ -2,6 +2,7 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
+from django.core.exceptions import ObjectDoesNotExist
 from django.db import DatabaseError
 from django.shortcuts import render, redirect, get_object_or_404
 
@@ -19,10 +20,16 @@ def user_info_view(request, username):
 def user_info_update_view(request, username):
     """Контроллер изменения информации о пользователе"""
     user = get_object_or_404(User, username=username)
+    try:
+        additional_info = user.additional_info
+    except ObjectDoesNotExist:
+        additional_info = None
+
     if request.user != user:
         return redirect("home")
+
     main_info_form = UserMainInfoForm(instance=user)
-    additional_info_form = UserAdditionalInfoForm(instance=user.additional_info)
+    additional_info_form = UserAdditionalInfoForm(instance=additional_info)
 
     if request.method == "GET":
         return render(request, "user_info_update.html",
@@ -49,9 +56,12 @@ def user_info_update_view(request, username):
                               {"main_info_form": main_info_form, "additional_info_form": additional_info_form})
 
         elif info_type == "additional":
-            additional_info_form = UserAdditionalInfoForm(request.POST, request.FILES, instance=user.additional_info)
+            additional_info_form = UserAdditionalInfoForm(request.POST, request.FILES, instance=additional_info)
             if additional_info_form.is_valid():
-                additional_info_form.save()
+                additional_info = additional_info_form.save(commit=False)
+                additional_info.user = user
+                additional_info.save()
+
                 messages.success(request, "Данные обновлены успешно")
                 return render(request, "user_info_update.html",
                               {"main_info_form": main_info_form, "additional_info_form": additional_info_form})
