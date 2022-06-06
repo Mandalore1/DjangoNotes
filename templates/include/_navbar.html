@@ -1,34 +1,42 @@
 <nav class="navbar navbar-expand-lg bg-light">
-  <div class="container-fluid">
-    <a class="navbar-brand" href="{% url 'home' %}">DjangoNotes</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
-            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
+    <div class="container-fluid">
+        <a class="navbar-brand" href="{% url 'home' %}">DjangoNotes</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
 
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-        <li class="nav-item">
-          <a class="nav-link" href="{% url 'home' %}">Главная</a>
-        </li>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'home' %}">Главная</a>
+                </li>
 
+                {% if request.user.is_authenticated %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'notes' %}">Мои записки</a>
+                </li>
+                {% endif %}
+            </ul>
+        </div>
+
+        <span class="navbar-text">
         {% if request.user.is_authenticated %}
-        <li class="nav-item">
-          <a class="nav-link" href="{% url 'notes' %}">Мои записки</a>
-        </li>
+            Приветствуем,
+            {% if request.user.additional_info.avatar %}
+            <img src="{{ request.user.additional_info.avatar.url }}" class="rounded"
+                 height="50px" alt="Аватар">
+            {% endif %}
+            <a href="{% url 'user_info' request.user.username %}">
+            {{ request.user.username }}
+            </a>
+            &nbsp;|
+            <a class="btn btn-outline-primary" href="{% url 'logout' %}">Выйти</a>
+        {% else %}
+            Вы не авторизованы |
+            <a class="btn btn-outline-primary" href="{% url 'login' %}">Войти</a> |
+            <a class="btn btn-outline-primary" href="{% url 'register' %}">Зарегистрироваться</a>
         {% endif %}
-      </ul>
+        </span>
     </div>
-
-    <span class="navbar-text">
-    {% if request.user.is_authenticated %}
-      Приветствуем, {{ request.user.username }} |
-      <a class="btn btn-outline-primary" href="{% url 'logout' %}">Выйти</a>
-    {% else %}
-      Вы не авторизованы |
-      <a class="btn btn-outline-primary" href="{% url 'login' %}">Войти</a> |
-      <a class="btn btn-outline-primary" href="{% url 'register' %}">Зарегистрироваться</a>
-    {% endif %}
-    </span>
-  </div>
 </nav>
