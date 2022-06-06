@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load time_since %}
 
 {% block title %}Мои записки{% endblock title %}
 
@@ -9,7 +10,7 @@
 {% for note in notes %}
 <div class="card mb-3">
     <div class="card-header">
-        Создан: {{ note.created_at }}
+        Создан: {% time_since_24h note.created_at %}
     </div>
 
     <div class="card-body">
@@ -21,7 +22,7 @@
             </div>
             <div class="col-md-8">
                 <h5 class="card-title">{{ note.title }}</h5>
-                <p class="card-text">{{ note.text }}</p>
+                <p class="card-text">{{ note.text|truncatechars:200 }}</p>
             </div>
         </div>
     </div>

@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load time_since %}
 
 {% block title %}Пользователь {{ user.username }}{% endblock title %}
 
@@ -19,7 +20,7 @@
         <p><strong>Место проживания:</strong> {{ user.additional_info.place }}</p>
         <p><strong>Email:</strong> {{ user.email }}</p>
         <p><strong>Дата регистрации:</strong> {{ user.date_joined }}</p>
-        <p><strong>Был в сети:</strong> {{ user.last_login }}</p>
+        <p><strong>Был в сети:</strong> {% time_since_24h user.last_login %}</p>
         <hr>
         <h2>О себе</h2>
         <p>{{ user.additional_info.about }}</p>
