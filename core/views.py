@@ -1,5 +1,6 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.db.models import Q
 from django.shortcuts import render, redirect, get_object_or_404
 
 from .forms import NoteForm
@@ -18,6 +19,10 @@ def notes_list_view(request):
     if request.method == "GET":
         user = request.user
         notes = user.notes.all()
+        if "search" in request.GET:
+            search_string = request.GET["search"]
+            query = Q(title__icontains=search_string) | Q(text__icontains=search_string)
+            notes = notes.filter(query)
         return render(request, "notes_list.html", {"notes": notes})
 
 

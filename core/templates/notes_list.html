@@ -6,7 +6,15 @@
 {% block h1 %}Мои записки{% endblock h1 %}
 
 {% block content %}
+<form method="get" action="" class="d-flex mb-3" role="search">
+    <input class="form-control me-2" type="search" placeholder="Поиск записок" aria-label="Search" name="search" value="{{ request.GET.search }}">
+    <button class="btn btn-outline-success" type="submit">Искать</button>
+</form>
 <a href="{% url 'note_add'%}" class="btn btn-primary mb-3">Добавить записку</a>
+{% if "search" in request.GET %}
+<h2>Поиск записок по запросу "{{ request.GET.search }}"</h2>
+<a href="{% url 'notes'%}" class="btn btn-primary mb-3">Назад к списку записок</a>
+{% endif %}
 {% for note in notes %}
 <div class="card mb-3">
     <div class="card-header">
