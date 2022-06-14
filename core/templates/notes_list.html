@@ -10,11 +10,29 @@
     <input class="form-control me-2" type="search" placeholder="Поиск записок" aria-label="Search" name="search" value="{{ request.GET.search }}">
     <button class="btn btn-outline-success" type="submit">Искать</button>
 </form>
-<a href="{% url 'note_add'%}" class="btn btn-primary mb-3">Добавить записку</a>
+
+<div class="mb-3">
+    <a href="{% url 'note_add'%}" class="btn btn-primary">Добавить записку</a>
+
+    <div class="dropdown d-inline-block">
+        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1"
+                data-bs-toggle="dropdown"
+                aria-expanded="false">
+            Сортировка
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+            <li><a href="?ordering=title" class="dropdown-item">По названию</a></li>
+            <li><a href="?ordering=oldest" class="dropdown-item">Сначала старые</a></li>
+            <li><a href="?ordering=newest" class="dropdown-item">Сначала новые</a></li>
+        </ul>
+    </div>
+</div>
+
 {% if "search" in request.GET %}
 <h2>Поиск записок по запросу "{{ request.GET.search }}"</h2>
 <a href="{% url 'notes'%}" class="btn btn-primary mb-3">Назад к списку записок</a>
 {% endif %}
+
 {% for note in notes %}
 <div class="card mb-3">
     <div class="card-header">

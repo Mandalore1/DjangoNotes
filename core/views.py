@@ -19,10 +19,24 @@ def notes_list_view(request):
     if request.method == "GET":
         user = request.user
         notes = user.notes.all()
+
         if "search" in request.GET:
             search_string = request.GET["search"]
             query = Q(title__icontains=search_string) | Q(text__icontains=search_string)
             notes = notes.filter(query)
+
+        if "ordering" in request.GET:
+            ordering_string = request.GET["ordering"]
+            orderings = {
+                "title": "title",
+                "oldest": "created_at",
+                "newest": "-created_at"
+            }
+            try:
+                notes = notes.order_by(orderings[ordering_string])
+            except KeyError:
+                pass
+
         return render(request, "notes_list.html", {"notes": notes})
 
 
