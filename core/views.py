@@ -1,5 +1,6 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator
 from django.db.models import Q
 from django.shortcuts import render, redirect, get_object_or_404
 
@@ -37,7 +38,14 @@ def notes_list_view(request):
             except KeyError:
                 pass
 
-        return render(request, "notes_list.html", {"notes": notes})
+        p = Paginator(notes, 2)
+        try:
+            page_num = int(request.GET["page"])
+        except (ValueError, KeyError):
+            page_num = 1
+        notes = p.page(page_num).object_list
+
+        return render(request, "notes_list.html", {"notes": notes, "page": p.page(page_num)})
 
 
 @login_required
