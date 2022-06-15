@@ -5,7 +5,7 @@ from django.db.models import Q
 from django.shortcuts import render, redirect, get_object_or_404
 
 from .forms import NoteForm
-from .models import Note
+from .models import Note, Tag
 
 
 def home_view(request):
@@ -37,6 +37,10 @@ def notes_list_view(request):
                 notes = notes.order_by(orderings[ordering_string])
             except KeyError:
                 pass
+
+        if "tag" in request.GET:
+            tag_slug = request.GET["tag"]
+            notes = notes.filter(tags__slug=tag_slug)
 
         p = Paginator(notes, 2)
         try:
