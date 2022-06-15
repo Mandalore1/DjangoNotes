@@ -19,7 +19,7 @@ def notes_list_view(request):
     """Контроллер списка записок пользователя"""
     if request.method == "GET":
         user = request.user
-        notes = user.notes.all()
+        notes = user.notes.all().prefetch_related('tags')
 
         if "search" in request.GET:
             search_string = request.GET["search"]

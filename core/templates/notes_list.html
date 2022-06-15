@@ -37,7 +37,14 @@
 {% for note in notes %}
 <div class="card mb-3">
     <div class="card-header">
-        Создан: {% time_since_24h note.created_at %}
+        <p class="mb-0">
+            Создан: {% time_since_24h note.created_at %}
+        </p>
+        {% if note.tags.exists %}
+        <p class="mt-3 mb-0">
+            Теги: {% for tag in note.tags.all %} {{ tag }} {% endfor %}
+        </p>
+        {% endif %}
     </div>
 
     <div class="card-body">

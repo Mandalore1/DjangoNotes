@@ -14,6 +14,13 @@
     </div>
     <div class="col-md-8">
         <p><strong>Автор: </strong> <a href="{% url 'user_info' note.user.username %}">{{ note.user.username }}</a></p>
+        <p><strong>Теги:</strong>
+            {% if note.tags.all.exists %}
+            {% for tag in note.tags.all %} {{ tag }} {% endfor %}
+            {% else %}
+            Нет
+            {% endif %}
+        </p>
         <p><strong>Создан:</strong> {% time_since_24h note.created_at %}</p>
         <p><strong>Изменен:</strong> {% time_since_24h note.created_at %}</p>
         <hr>
