@@ -70,9 +70,17 @@ def notes_add_view(request):
     if request.method == "POST":
         form = NoteForm(request.POST, request.FILES)
         if form.is_valid():
+            # Сохраняем форму без коммита, так как нужно еще прописать юзера
             note = form.save(commit=False)
+
+            # Прописываем юзера к записке и сохраняем
             note.user = request.user
             note.save()
+
+            # Когда сохранялась форма, не были сохранены теги, так как это m2m, который может сохраниться только после
+            # создания записи в базе данных, поэтому после создания сохраняем теги через форму с помощью save_m2m
+            form.save_m2m()
+
             return redirect("note", pk=note.pk)
         else:
             messages.error(request, "Введенные данные имели неверный формат!")
