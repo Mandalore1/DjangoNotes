@@ -42,6 +42,10 @@ def notes_list_view(request):
             tag_slug = request.GET["tag"]
             notes = notes.filter(tags__slug=tag_slug)
 
+        if "favorites" in request.GET:
+            if request.GET["favorites"] == "true":
+                notes = notes.filter(is_favorite=True)
+
         p = Paginator(notes, 2)
         try:
             page_num = int(request.GET["page"])
