@@ -90,30 +90,6 @@
 </div>
 {% endfor %}
 
-{% if page.paginator.count > 0 %}
-<nav aria-label="...">
-    <ul class="pagination">
-        {% if page.has_previous %}
-        <li class="page-item">
-            <a class="page-link" href="?{% add_query_params request 'page' 1 %}">&laquo;</a>
-        </li>
-        <li class="page-item">
-            <a class="page-link" href="?{% add_query_params request 'page' page.previous_page_number %}"><</a>
-        </li>
-        {% endif %}
-        <li class="page-item active" aria-current="page">
-            <span class="page-link">{{ page.number }}</span>
-        </li>
-        {% if page.has_next %}
-        <li class="page-item">
-            <a class="page-link" href="?{% add_query_params request 'page' page.next_page_number %}">></a>
-        </li>
-        <li class="page-item">
-            <a class="page-link" href="?{% add_query_params request 'page' page.paginator.num_pages %}">&raquo;</a>
-        </li>
-        {% endif %}
-    </ul>
-</nav>
-{% endif %}
+{% include "include/_pagination.html" %}
 
 {% endblock content %}
