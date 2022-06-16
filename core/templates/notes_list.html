@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% load time_since %}
 {% load query_params %}
+{% load tags %}
 
 {% block title %}Мои записки{% endblock title %}
 
@@ -15,6 +16,7 @@
 <div class="mb-3">
     <a href="{% url 'note_add'%}" class="btn btn-primary">Добавить записку</a>
     <a href="?favorites=true" class="btn btn-primary">Избранное</a>
+    {% tags_dropdown %}
 
     <div class="dropdown d-inline-block">
         <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1"

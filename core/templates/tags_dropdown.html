@@ -1,0 +1,11 @@
+<div class="dropdown d-inline-block">
+    <button class="btn btn-secondary dropdown-toggle" type="button" id="tags-dropdown"
+            data-bs-toggle="dropdown" aria-expanded="false">
+        Поиск по тегу
+    </button>
+    <ul class="dropdown-menu" aria-labelledby="tags-dropdown">
+        {% for tag in tags %}
+        <li><a class="dropdown-item" href="?tag={{ tag.slug }}">{{ tag }}</a></li>
+        {% endfor %}
+    </ul>
+</div>
