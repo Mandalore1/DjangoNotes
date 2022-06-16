@@ -46,10 +46,12 @@ def notes_list_view(request):
             if request.GET["favorites"] == "true":
                 notes = notes.filter(is_favorite=True)
 
-        p = Paginator(notes, 2)
         try:
             page_num = int(request.GET["page"])
         except (ValueError, KeyError):
+            page_num = 1
+        p = Paginator(notes, 2)
+        if page_num > p.num_pages:
             page_num = 1
         notes = p.page(page_num).object_list
 
