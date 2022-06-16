@@ -3,7 +3,16 @@
 
 {% block title %}{{ note.title }}{% endblock title %}
 
-{% block h1 %}{{ note.title }}{% endblock h1 %}
+{% block h1 %}
+{{ note.title }}
+<a href="{% url 'note_favorite' note.pk%}">
+    {% if note.is_favorite %}
+    <i class="bi bi-star-fill" style="color: gold;"></i>
+    {% else %}
+    <i class="bi bi-star" style="color: gold;"></i>
+    {% endif %}
+</a>
+{% endblock h1 %}
 
 {% block content %}
 <div class="row mb-3">

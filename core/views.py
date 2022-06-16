@@ -126,3 +126,20 @@ def notes_delete_view(request, pk):
         note.delete()
         messages.success(request, "Записка успешно удалена!")
         return redirect("notes")
+
+
+@login_required
+def notes_favorite_view(request, pk):
+    """Контроллер добавления записки в избранное"""
+    note = get_object_or_404(Note, pk=pk)
+    if note.user != request.user:
+        return redirect("home")
+
+    if request.method == "GET":
+        note.is_favorite = not note.is_favorite
+        note.save()
+        if note.is_favorite:
+            messages.success(request, "Записка успешно добавлена в избранное")
+        else:
+            messages.success(request, "Записка успешно удалена из избранного")
+        return redirect("note", pk)

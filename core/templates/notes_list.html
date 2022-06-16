@@ -37,8 +37,15 @@
 {% for note in notes %}
 <div class="card mb-3">
     <div class="card-header">
-        <p class="mb-0">
+        <p class="mb-0 color-red">
             Создан: {% time_since_24h note.created_at %}
+            <a href="{% url 'note_favorite' note.pk%}">
+                {% if note.is_favorite %}
+                <i class="bi bi-star-fill" style="color: gold;"></i>
+                {% else %}
+                <i class="bi bi-star" style="color: gold;"></i>
+                {% endif %}
+            </a>
         </p>
         {% if note.tags.exists %}
         <p class="mt-3 mb-0">

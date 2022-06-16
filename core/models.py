@@ -26,6 +26,7 @@ class Note(models.Model):
     updated_at = models.DateTimeField(auto_now=True, verbose_name="Обновлен")
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="notes", verbose_name="Пользователь")
     tags = models.ManyToManyField(Tag, blank=True, related_name="notes", verbose_name="Теги")
+    is_favorite = models.BooleanField(default=False, verbose_name="В избранном")
 
     def __str__(self):
         return self.title
