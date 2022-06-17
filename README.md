@@ -4,14 +4,14 @@
 ## Запуск
 Установить зависимости
 ```bash
-pip install requirements.txt
+pip install -r requirements.txt
 ```
 Сделать миграции
 ```bash
 python manage.py makemigrations
 python manage.py migrate
 ```
-Скачать и разархивировать библиотеки в каталог Notes/static/libs: https://drive.google.com/file/d/1P3EejmkCHcorKSUHHc-mEcgS2Tqdfp-X/view?usp=sharing
+Скачать и разархивировать библиотеки в каталог Notes/static/libs: https://drive.google.com/file/d/1mV6W4xatTi22DvJd-y17kIpZ0h0CzqM-/view?usp=sharing
 
 Собрать статические файлы
 ```bash
