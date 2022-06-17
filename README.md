@@ -11,8 +11,8 @@ pip install requirements.txt
 python manage.py makemigrations
 python manage.py migrate
 ```
-Скачать и разархивировать bootstrap в каталог Notes/libs
-https://drive.google.com/file/d/1P3EejmkCHcorKSUHHc-mEcgS2Tqdfp-X/view?usp=sharing
+Скачать и разархивировать библиотеки в каталог Notes/libs: https://drive.google.com/file/d/1P3EejmkCHcorKSUHHc-mEcgS2Tqdfp-X/view?usp=sharing
+
 Собрать статические файлы
 ```bash
 python manage.py collectstatic
