@@ -5,4 +5,18 @@
 {% block h1 %}Главная страница{% endblock h1 %}
 
 {% block content %}
+<p>Добро пожаловать на сайт DjangoNotes! Здесь вы можете создавать и управлять своими записками.</p>
+{% if request.user.is_authenticated %}
+<a href="{% url 'note_add' %}">Создать записку</a>
+<br>
+<a href="{% url 'notes' %}">Посмотреть список записок</a>
+<br>
+<a href="{% url 'notes' %}?favorites=true">Избранное</a>
+<br>
+<a href="{% url 'user_info' request.user.username %}">Мой профиль</a>
+{% else %}
+<a href="{% url 'login' %}" class="btn btn-primary">Войти</a>
+<a href="{% url 'register' %}" class="btn btn-primary">Зарегистрироваться</a>
+{% endif %}
+
 {% endblock content %}

@@ -7,9 +7,9 @@
 {{ note.title }}
 <a href="{% url 'note_favorite' note.pk%}">
     {% if note.is_favorite %}
-    <i class="bi bi-star-fill" style="color: gold;"></i>
+    <i class="bi bi-star-fill" style="color: gold;" title="Убрать из избранного"></i>
     {% else %}
-    <i class="bi bi-star" style="color: gold;"></i>
+    <i class="bi bi-star" style="color: gold;"  title="Добавить в избранное"></i>
     {% endif %}
 </a>
 {% endblock h1 %}
